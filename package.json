@@ -1,0 +1,15 @@
+{
+  "name": "yokbaan",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": ["packages/*", "apps/*"],
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "api:dev": "npm run start:dev -w @yokbaan/api",
+    "api:test": "npm run test:e2e -w @yokbaan/api",
+    "web:dev": "npm run dev -w @yokbaan/web",
+    "web:test": "npm run test -w @yokbaan/web"
+  }
+}
