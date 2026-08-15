@@ -35,7 +35,7 @@
 - Consumes: —
 - Produces: npm workspaces ที่ชี้ไป `apps/*` และ `packages/*` · `tsconfig.base.json` ที่ทุก workspace `extends`
 
-- [ ] **Step 1: สร้าง git repository**
+- [x] **Step 1: สร้าง git repository**
 
 ```bash
 cd ~/Desktop/GitHub/yokbaan
@@ -43,7 +43,7 @@ git init
 git branch -M main
 ```
 
-- [ ] **Step 2: สร้าง `.gitignore`**
+- [x] **Step 2: สร้าง `.gitignore`**
 
 ```gitignore
 node_modules/
@@ -57,7 +57,7 @@ coverage/
 .superpowers/
 ```
 
-- [ ] **Step 3: สร้าง root `package.json`**
+- [x] **Step 3: สร้าง root `package.json`**
 
 ```json
 {
@@ -77,7 +77,7 @@ coverage/
 }
 ```
 
-- [ ] **Step 4: สร้าง `tsconfig.base.json`**
+- [x] **Step 4: สร้าง `tsconfig.base.json`**
 
 ```json
 {
@@ -95,7 +95,7 @@ coverage/
 }
 ```
 
-- [ ] **Step 5: สร้าง `.env.example`**
+- [x] **Step 5: สร้าง `.env.example`**
 
 ```bash
 # PostgreSQL (รันด้วย docker compose up -d)
@@ -109,7 +109,7 @@ API_PORT=3000
 WEB_ORIGIN=http://localhost:5173
 ```
 
-- [ ] **Step 6: คัดลอกเป็น `.env` จริง และตรวจว่า git ไม่เห็นมัน**
+- [x] **Step 6: คัดลอกเป็น `.env` จริง และตรวจว่า git ไม่เห็นมัน**
 
 ```bash
 cp .env.example .env
@@ -118,7 +118,7 @@ git status --short
 
 Expected: ไม่มีบรรทัด `.env` (มีแต่ `.env.example`) — ถ้าเห็น `.env` แปลว่า `.gitignore` ผิด
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add .gitignore package.json tsconfig.base.json .env.example CONTEXT.md docs/
@@ -137,7 +137,7 @@ git commit -m "chore: initialise yokbaan monorepo skeleton"
 - Consumes: `DATABASE_URL` และ `DATABASE_URL_TEST` จาก `.env` (Task 1.1)
 - Produces: PostgreSQL 17 ที่ `localhost:5434` มี 2 ฐานข้อมูล — `yokbaan` (ใช้ทดลอง) และ `yokbaan_test` (ให้เทสใช้) user/password เป็น `yokbaan` ทั้งคู่
 
-- [ ] **Step 1: สร้าง `docker/postgres-init/01-create-test-database.sql`**
+- [x] **Step 1: สร้าง `docker/postgres-init/01-create-test-database.sql`**
 
 ```sql
 CREATE DATABASE yokbaan_test;
@@ -147,7 +147,7 @@ CREATE DATABASE yokbaan_test;
 > ถ้าใช้ฐานเดียวกับที่เราเปิดเว็บเล่น ข้อมูลสินค้าที่เพิ่งกรอกจะหายทุกครั้งที่รันเทส
 > ไฟล์ในโฟลเดอร์ `/docker-entrypoint-initdb.d` จะถูก Postgres รันอัตโนมัติ **ครั้งแรกที่สร้าง volume เท่านั้น**
 
-- [ ] **Step 2: สร้าง `docker-compose.yml`**
+- [x] **Step 2: สร้าง `docker-compose.yml`**
 
 ```yaml
 services:
@@ -174,11 +174,11 @@ volumes:
   yokbaan-pgdata:
 ```
 
-- [ ] **Step 3: เปิดฐานข้อมูล**
+- [x] **Step 3: เปิดฐานข้อมูล**
 
 Run: `npm run db:up`
 
-- [ ] **Step 4: ตรวจว่าฐานข้อมูลพร้อมใช้จริง**
+- [x] **Step 4: ตรวจว่าฐานข้อมูลพร้อมใช้จริง**
 
 Run: `docker exec yokbaan-postgres pg_isready -U yokbaan -d yokbaan`
 
@@ -186,7 +186,7 @@ Expected: `/var/run/postgresql:5432 - accepting connections`
 
 ถ้าได้ `no response` ให้รอ 5 วินาทีแล้วรันซ้ำ — ครั้งแรกฐานข้อมูลต้องสร้างไฟล์ก่อน
 
-- [ ] **Step 5: ตรวจว่าฐานข้อมูลเทสถูกสร้างแล้ว**
+- [x] **Step 5: ตรวจว่าฐานข้อมูลเทสถูกสร้างแล้ว**
 
 Run: `docker exec yokbaan-postgres psql -U yokbaan -lqt | cut -d '|' -f 1 | tr -d ' '`
 
@@ -196,7 +196,7 @@ Expected: มีทั้ง `yokbaan` และ `yokbaan_test` ในราย�
 > `docker compose down -v && npm run db:up`
 > (`-v` ลบข้อมูลทั้งหมดในฐานข้อมูล ตอนนี้ยังไม่มีอะไรจึงปลอดภัย แต่อย่าใช้คำสั่งนี้หลังจากมีข้อมูลจริงแล้ว)
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add docker-compose.yml docker/
@@ -221,7 +221,7 @@ git commit -m "chore: add postgres 17 with separate test database"
 - Consumes: `tsconfig.base.json` (Task 1.1)
 - Produces: `AppModule` (`apps/api/src/app.module.ts`) — module ราก ทุก module รุ่นหลังจะถูก import ที่นี่ · `GET /health` → `200 { status: 'ok' }`
 
-- [ ] **Step 1: สร้าง `apps/api/package.json`**
+- [x] **Step 1: สร้าง `apps/api/package.json`**
 
 ```json
 {
@@ -256,7 +256,7 @@ git commit -m "chore: add postgres 17 with separate test database"
 }
 ```
 
-- [ ] **Step 2: สร้าง `apps/api/tsconfig.json`**
+- [x] **Step 2: สร้าง `apps/api/tsconfig.json`**
 
 ```json
 {
@@ -276,7 +276,7 @@ git commit -m "chore: add postgres 17 with separate test database"
 
 > `strictPropertyInitialization: false` จำเป็นเพราะ NestJS ใช้ dependency injection ผ่าน constructor และ decorator — property ถูกเซ็ตโดย framework ไม่ใช่โดยเรา
 
-- [ ] **Step 3: สร้าง `apps/api/nest-cli.json`**
+- [x] **Step 3: สร้าง `apps/api/nest-cli.json`**
 
 ```json
 {
@@ -287,7 +287,7 @@ git commit -m "chore: add postgres 17 with separate test database"
 }
 ```
 
-- [ ] **Step 4: สร้าง `apps/api/test/jest-e2e.json`**
+- [x] **Step 4: สร้าง `apps/api/test/jest-e2e.json`**
 
 ```json
 {
@@ -299,11 +299,11 @@ git commit -m "chore: add postgres 17 with separate test database"
 }
 ```
 
-- [ ] **Step 5: ติดตั้ง dependencies**
+- [x] **Step 5: ติดตั้ง dependencies**
 
 Run: `npm install` (จาก root — npm workspaces จะติดตั้งให้ทุก workspace)
 
-- [ ] **Step 6: เขียนเทสที่จะ fail**
+- [x] **Step 6: เขียนเทสที่จะ fail**
 
 สร้าง `apps/api/test/health.e2e-spec.ts`:
 
@@ -336,7 +336,7 @@ describe('Health (e2e)', () => {
 });
 ```
 
-- [ ] **Step 7: รันเทสให้เห็นว่ามัน fail**
+- [x] **Step 7: รันเทสให้เห็นว่ามัน fail**
 
 Run: `npm run api:test`
 
@@ -344,7 +344,7 @@ Expected: FAIL — `Cannot find module '../src/app.module'`
 
 > **ทำไมต้องรันให้ fail ก่อน** — เพื่อพิสูจน์ว่าเทสตัวนี้ทำงานจริงและกำลังทดสอบสิ่งที่เราคิด เทสที่ผ่านตั้งแต่ยังไม่มีโค้ดคือเทสที่ไม่ได้ทดสอบอะไรเลย
 
-- [ ] **Step 8: เขียนโค้ดน้อยที่สุดให้ผ่าน**
+- [x] **Step 8: เขียนโค้ดน้อยที่สุดให้ผ่าน**
 
 สร้าง `apps/api/src/health/health.controller.ts`:
 
@@ -389,13 +389,13 @@ async function bootstrap() {
 void bootstrap();
 ```
 
-- [ ] **Step 9: รันเทสให้ผ่าน**
+- [x] **Step 9: รันเทสให้ผ่าน**
 
 Run: `npm run api:test`
 
 Expected: PASS — `Health (e2e) › GET /health returns status ok`
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add apps/api
@@ -419,11 +419,11 @@ git commit -m "feat(api): add nestjs app with health endpoint"
 - Consumes: `AppModule` (Task 1.3) · PostgreSQL ที่ port 5434 (Task 1.2)
 - Produces: `PrismaService extends PrismaClient` (`apps/api/src/prisma/prisma.service.ts`) — inject ตัวนี้ทุกครั้งที่ต้องคุยกับฐานข้อมูล · `PrismaModule` ที่ประกาศ `@Global()` จึงไม่ต้อง import ซ้ำในทุก module · `GET /health/db` → `200 { database: 'connected' }`
 
-- [ ] **Step 1: เพิ่ม dependency ของ Prisma**
+- [x] **Step 1: เพิ่ม dependency ของ Prisma**
 
 Run: `npm install prisma@^6 @prisma/client@^6 dotenv@^16 -w @yokbaan/api`
 
-- [ ] **Step 2: เพิ่ม script ของ Prisma ใน `apps/api/package.json`**
+- [x] **Step 2: เพิ่ม script ของ Prisma ใน `apps/api/package.json`**
 
 เพิ่มใน `"scripts"`:
 
@@ -432,7 +432,7 @@ Run: `npm install prisma@^6 @prisma/client@^6 dotenv@^16 -w @yokbaan/api`
     "prisma:migrate": "prisma migrate dev"
 ```
 
-- [ ] **Step 3: สร้าง `apps/api/prisma/schema.prisma`**
+- [x] **Step 3: สร้าง `apps/api/prisma/schema.prisma`**
 
 ```prisma
 generator client {
@@ -447,7 +447,7 @@ datasource db {
 
 > ยังไม่มี model — เฟสนี้แค่พิสูจน์ว่าต่อฐานข้อมูลได้ model แรก (`User`) จะมาใน Task 2.1
 
-- [ ] **Step 4: ให้ Prisma อ่าน `.env` จาก root ได้**
+- [x] **Step 4: ให้ Prisma อ่าน `.env` จาก root ได้**
 
 สร้าง `apps/api/.env` เป็น symlink ไปหาไฟล์ที่ root:
 
@@ -463,13 +463,13 @@ git status --short apps/api
 
 Expected: ไม่มีบรรทัดไหนเอ่ยถึง `.env`
 
-- [ ] **Step 5: สร้าง Prisma client**
+- [x] **Step 5: สร้าง Prisma client**
 
 Run: `npm run prisma:generate -w @yokbaan/api`
 
 Expected: `Generated Prisma Client (v6.x.x)`
 
-- [ ] **Step 6: เขียนเทสที่จะ fail**
+- [x] **Step 6: เขียนเทสที่จะ fail**
 
 เพิ่ม test case ใน `apps/api/test/health.e2e-spec.ts` ต่อจาก case เดิม:
 
@@ -480,13 +480,13 @@ Expected: `Generated Prisma Client (v6.x.x)`
   });
 ```
 
-- [ ] **Step 7: รันเทสให้เห็นว่า fail**
+- [x] **Step 7: รันเทสให้เห็นว่า fail**
 
 Run: `npm run api:test`
 
 Expected: case แรกยัง PASS · case ใหม่ FAIL ด้วย 404
 
-- [ ] **Step 8: สร้าง `apps/api/src/prisma/prisma.service.ts`**
+- [x] **Step 8: สร้าง `apps/api/src/prisma/prisma.service.ts`**
 
 ```ts
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
@@ -507,7 +507,7 @@ export class PrismaService
 }
 ```
 
-- [ ] **Step 9: สร้าง `apps/api/src/prisma/prisma.module.ts`**
+- [x] **Step 9: สร้าง `apps/api/src/prisma/prisma.module.ts`**
 
 ```ts
 import { Global, Module } from '@nestjs/common';
@@ -521,7 +521,7 @@ import { PrismaService } from './prisma.service';
 export class PrismaModule {}
 ```
 
-- [ ] **Step 10: แก้ `apps/api/src/health/health.controller.ts`**
+- [x] **Step 10: แก้ `apps/api/src/health/health.controller.ts`**
 
 ```ts
 import { Controller, Get } from '@nestjs/common';
@@ -544,7 +544,7 @@ export class HealthController {
 }
 ```
 
-- [ ] **Step 11: แก้ `apps/api/src/app.module.ts`**
+- [x] **Step 11: แก้ `apps/api/src/app.module.ts`**
 
 ```ts
 import { Module } from '@nestjs/common';
@@ -558,7 +558,7 @@ import { PrismaModule } from './prisma/prisma.module';
 export class AppModule {}
 ```
 
-- [ ] **Step 12: โหลด `.env` ตอน bootstrap — แก้ `apps/api/src/main.ts`**
+- [x] **Step 12: โหลด `.env` ตอน bootstrap — แก้ `apps/api/src/main.ts`**
 
 เพิ่มสองบรรทัดบนสุด **ก่อน** import อื่นทั้งหมด:
 
@@ -568,7 +568,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 ```
 
-- [ ] **Step 13: ให้เทสใช้ฐานข้อมูลเทส ไม่ใช่ฐานข้อมูลที่เราเล่น**
+- [x] **Step 13: ให้เทสใช้ฐานข้อมูลเทส ไม่ใช่ฐานข้อมูลที่เราเล่น**
 
 สร้าง `apps/api/test/setup-env.ts`:
 
@@ -605,7 +605,7 @@ process.env.DATABASE_URL = testUrl;
 }
 ```
 
-- [ ] **Step 14: รันเทสให้ผ่าน**
+- [x] **Step 14: รันเทสให้ผ่าน**
 
 ตรวจก่อนว่าฐานข้อมูลเปิดอยู่: `npm run db:up`
 
@@ -615,7 +615,7 @@ Expected: PASS ทั้ง 2 cases
 
 > ถ้าได้ `Can't reach database server at localhost:5434` แปลว่า Docker ยังไม่ขึ้น — รัน `npm run db:up` แล้วรอ 5 วินาที
 
-- [ ] **Step 15: Commit**
+- [x] **Step 15: Commit**
 
 ```bash
 git add apps/api
@@ -638,7 +638,7 @@ git commit -m "feat(api): connect prisma to postgres with db health check"
 - Consumes: `tsconfig.base.json` (Task 1.1) · `GET /health` (Task 1.3)
 - Produces: `@yokbaan/shared` export `healthResponseSchema` (zod) และ type `HealthResponse` — ทั้ง `apps/api` และ `apps/web` import จากที่นี่
 
-- [ ] **Step 1: สร้าง `packages/shared/package.json`**
+- [x] **Step 1: สร้าง `packages/shared/package.json`**
 
 ```json
 {
@@ -655,7 +655,7 @@ git commit -m "feat(api): connect prisma to postgres with db health check"
 
 > ชี้ `main` ไปที่ `.ts` ตรงๆ ได้เพราะทั้ง ts-jest และ Vite คอมไพล์ TypeScript ให้อยู่แล้ว ไม่ต้องมีขั้น build แยก — ลดความยุ่งยากลงหนึ่งชั้น
 
-- [ ] **Step 2: สร้าง `packages/shared/tsconfig.json`**
+- [x] **Step 2: สร้าง `packages/shared/tsconfig.json`**
 
 ```json
 {
@@ -669,7 +669,7 @@ git commit -m "feat(api): connect prisma to postgres with db health check"
 }
 ```
 
-- [ ] **Step 3: สร้าง `packages/shared/src/health.ts`**
+- [x] **Step 3: สร้าง `packages/shared/src/health.ts`**
 
 ```ts
 import { z } from 'zod';
@@ -681,19 +681,19 @@ export const healthResponseSchema = z.object({
 export type HealthResponse = z.infer<typeof healthResponseSchema>;
 ```
 
-- [ ] **Step 4: สร้าง `packages/shared/src/index.ts`**
+- [x] **Step 4: สร้าง `packages/shared/src/index.ts`**
 
 ```ts
 export * from './health';
 ```
 
-- [ ] **Step 5: ให้ api ใช้ shared ได้**
+- [x] **Step 5: ให้ api ใช้ shared ได้**
 
 Run: `npm install @yokbaan/shared@* -w @yokbaan/api`
 
 ตรวจว่า `apps/api/package.json` มี `"@yokbaan/shared": "*"` ใน `dependencies`
 
-- [ ] **Step 6: เขียนเทสที่จะ fail — แก้ case แรกใน `apps/api/test/health.e2e-spec.ts`**
+- [x] **Step 6: เขียนเทสที่จะ fail — แก้ case แรกใน `apps/api/test/health.e2e-spec.ts`**
 
 เพิ่ม import บนสุด:
 
@@ -711,7 +711,7 @@ import { healthResponseSchema } from '@yokbaan/shared';
   });
 ```
 
-- [ ] **Step 7: รันเทส**
+- [x] **Step 7: รันเทส**
 
 Run: `npm run api:test`
 
@@ -727,7 +727,7 @@ Expected: **PASS ทั้ง 2 cases**
 > `packages/shared/package.json` เปลี่ยน `main` ฝั่งเทสจะยังชี้ path เก่าอยู่ ขณะที่ฝั่งเว็บย้ายตาม
 > กลายเป็นความต่างระหว่างสองฝั่ง ซึ่งคือสิ่งที่ package นี้เกิดมาเพื่อป้องกันพอดี
 
-- [ ] **Step 8: พิสูจน์ว่า schema กลาง "มีฟัน" จริง**
+- [x] **Step 8: พิสูจน์ว่า schema กลาง "มีฟัน" จริง**
 
 นี่คือขั้นแดงตัวจริงของ task นี้ — เทสที่ผ่านเฉยๆ ยังไม่ได้พิสูจน์ว่า schema บังคับอะไร
 
@@ -741,7 +741,7 @@ Expected: case `GET /health matches the shared schema` **FAIL** ส่วน cas
 > ถ้า TypeScript ปัดตกตั้งแต่ตอน compile ก็ถือว่าใช้ได้เหมือนกัน — บันทึก error นั้นไว้แทน
 > เพราะมันพิสูจน์ว่า type จาก schema กลางกำลังคุมฝั่ง API อยู่จริง
 
-- [ ] **Step 9: คืนค่าเดิมแล้วยืนยัน**
+- [x] **Step 9: คืนค่าเดิมแล้วยืนยัน**
 
 ```bash
 git checkout -- apps/api/src/health/health.controller.ts
@@ -754,7 +754,7 @@ Expected: PASS ทั้ง 2 cases
 > ฝั่ง API ถูกเทสบังคับให้ตอบตามนั้น ฝั่งเว็บจะ import ตัวเดียวกันไปใช้ใน Task 1.6
 > ใครแก้ข้างเดียวเมื่อไหร่ อีกข้างพังทันทีตอน build หรือตอนเทส ไม่ใช่ตอนลูกค้าเปิดเว็บ
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add packages/shared apps/api
@@ -781,7 +781,7 @@ git commit -m "feat(shared): add zod-backed contract package shared by api and w
 - Consumes: `@yokbaan/shared` (Task 1.5) · `GET /health` (Task 1.3)
 - Produces: `apiGet<T>(path, schema)` (`apps/web/src/api/client.ts`) — **ทุกการเรียก API ในโปรเจคต้องผ่านฟังก์ชันนี้** · `fetchHealth()` (`apps/web/src/api/health.ts`)
 
-- [ ] **Step 1: สร้าง `apps/web/package.json`**
+- [x] **Step 1: สร้าง `apps/web/package.json`**
 
 ```json
 {
@@ -813,7 +813,7 @@ git commit -m "feat(shared): add zod-backed contract package shared by api and w
 }
 ```
 
-- [ ] **Step 2: สร้าง `apps/web/tsconfig.json`**
+- [x] **Step 2: สร้าง `apps/web/tsconfig.json`**
 
 ```json
 {
@@ -831,7 +831,7 @@ git commit -m "feat(shared): add zod-backed contract package shared by api and w
 }
 ```
 
-- [ ] **Step 3: สร้าง `apps/web/vite.config.ts`**
+- [x] **Step 3: สร้าง `apps/web/vite.config.ts`**
 
 ```ts
 import { defineConfig } from 'vitest/config';
@@ -858,7 +858,7 @@ export default defineConfig({
 
 > **proxy คืออะไร** — ตอน dev เว็บรันที่ port 5173 ส่วน API อยู่ 3000 เบราว์เซอร์จะบล็อกการเรียกข้าม port (CORS) การให้ Vite เป็นตัวกลางส่งต่อทำให้เบราว์เซอร์เห็นว่าทุกอย่างมาจาก 5173 เดียวกัน ปัญหาจึงหายไปตั้งแต่แรก
 
-- [ ] **Step 4: สร้าง `apps/web/index.html`**
+- [x] **Step 4: สร้าง `apps/web/index.html`**
 
 ```html
 <!doctype html>
@@ -875,11 +875,11 @@ export default defineConfig({
 </html>
 ```
 
-- [ ] **Step 5: ติดตั้ง dependencies**
+- [x] **Step 5: ติดตั้ง dependencies**
 
 Run: `npm install`
 
-- [ ] **Step 6: เขียนเทสที่จะ fail**
+- [x] **Step 6: เขียนเทสที่จะ fail**
 
 สร้าง `apps/web/src/api/health.test.ts`:
 
@@ -914,13 +914,13 @@ describe('fetchHealth', () => {
 });
 ```
 
-- [ ] **Step 7: รันเทสให้เห็นว่า fail**
+- [x] **Step 7: รันเทสให้เห็นว่า fail**
 
 Run: `npm run web:test`
 
 Expected: FAIL — `Failed to resolve import "./health"`
 
-- [ ] **Step 8: สร้าง `apps/web/src/api/client.ts`**
+- [x] **Step 8: สร้าง `apps/web/src/api/client.ts`**
 
 ```ts
 import type { ZodSchema } from 'zod';
@@ -948,7 +948,7 @@ export async function apiGet<T>(path: string, schema: ZodSchema<T>): Promise<T> 
 
 > `credentials: 'include'` ตั้งไว้ตั้งแต่ตอนนี้เพราะเฟส 2 จะใช้ session cookie — ถ้าไม่ใส่ เบราว์เซอร์จะไม่ส่ง cookie ไปกับ request แล้ว login จะไม่ทำงาน
 
-- [ ] **Step 9: สร้าง `apps/web/src/api/health.ts`**
+- [x] **Step 9: สร้าง `apps/web/src/api/health.ts`**
 
 ```ts
 import { healthResponseSchema, type HealthResponse } from '@yokbaan/shared';
@@ -959,13 +959,13 @@ export function fetchHealth(): Promise<HealthResponse> {
 }
 ```
 
-- [ ] **Step 10: รันเทสให้ผ่าน**
+- [x] **Step 10: รันเทสให้ผ่าน**
 
 Run: `npm run web:test`
 
 Expected: PASS ทั้ง 2 cases
 
-- [ ] **Step 11: สร้างหน้าเว็บจริง — `apps/web/src/index.css`**
+- [x] **Step 11: สร้างหน้าเว็บจริง — `apps/web/src/index.css`**
 
 ```css
 @import "tailwindcss";
@@ -1022,7 +1022,7 @@ createRoot(container).render(
 );
 ```
 
-- [ ] **Step 12: ตรวจด้วยตาว่าทั้งเส้นทำงาน**
+- [x] **Step 12: ตรวจด้วยตาว่าทั้งเส้นทำงาน**
 
 เปิด 3 terminal:
 
@@ -1038,13 +1038,13 @@ Expected: เห็นหัวข้อ "YokBaan" และข้อควา�
 
 > ถ้าเห็น ❌ ให้เปิด DevTools แท็บ Network ดูว่า `/api/health` ตอบอะไร — ถ้าได้ 404 แปลว่า API ยังไม่ขึ้น ถ้าได้ 500 แปลว่า API ขึ้นแต่พัง
 
-- [ ] **Step 13: ตรวจว่า TypeScript ไม่มี error**
+- [x] **Step 13: ตรวจว่า TypeScript ไม่มี error**
 
 Run: `npm run build -w @yokbaan/web`
 
 Expected: build สำเร็จ ไม่มี type error
 
-- [ ] **Step 14: Commit**
+- [x] **Step 14: Commit**
 
 ```bash
 git add apps/web
