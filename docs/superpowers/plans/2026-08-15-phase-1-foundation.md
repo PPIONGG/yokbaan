@@ -1064,7 +1064,7 @@ git commit -m "feat(web): add react + vite + tailwind app wired to the api"
 - Consumes: ทุก task ก่อนหน้า
 - Produces: `docs/systems/README.md` — template ที่ทุกเอกสารระบบในเฟสหลังต้องทำตาม
 
-- [ ] **Step 1: สร้าง `README.md` ที่ root**
+- [x] **Step 1: สร้าง `README.md` ที่ root**
 
 ````markdown
 # YokBaan
@@ -1103,7 +1103,7 @@ npm run web:dev    # http://localhost:5173
 - [เอกสารประจำระบบ](docs/systems/)
 ````
 
-- [ ] **Step 2: สร้าง `docs/systems/README.md`**
+- [x] **Step 2: สร้าง `docs/systems/README.md`**
 
 ```markdown
 # เอกสารประจำระบบ
@@ -1133,7 +1133,7 @@ npm run web:dev    # http://localhost:5173
 6. **วิธีทดสอบ** — คำสั่งรันเทส + เทสไหนพิสูจน์อะไร
 ```
 
-- [ ] **Step 3: อัปเดต `CONTEXT.md` — เปลี่ยนตาราง "ตอนนี้อยู่ตรงไหน"**
+- [x] **Step 3: อัปเดต `CONTEXT.md` — เปลี่ยนตาราง "ตอนนี้อยู่ตรงไหน"**
 
 แทนที่แถว "เขียน implementation plan" และ "ลงมือเขียนโค้ด" ด้วย:
 
@@ -1145,7 +1145,7 @@ npm run web:dev    # http://localhost:5173
 
 และลบบรรทัด "**ยังไม่มีโค้ดสักบรรทัด** — มีแต่เอกสาร" ออก
 
-- [ ] **Step 4: ตรวจว่าทุกเทสยังผ่าน**
+- [x] **Step 4: ตรวจว่าทุกเทสยังผ่าน**
 
 ```bash
 npm run api:test && npm run web:test
@@ -1153,7 +1153,7 @@ npm run api:test && npm run web:test
 
 Expected: PASS ทั้งหมด
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add README.md docs/ CONTEXT.md
