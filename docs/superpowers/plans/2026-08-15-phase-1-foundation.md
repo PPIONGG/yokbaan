@@ -715,33 +715,44 @@ import { healthResponseSchema } from '@yokbaan/shared';
 
 Run: `npm run api:test`
 
-Expected: FAIL — `Cannot find module '@yokbaan/shared'` (ถ้า ts-jest ยังหาไม่เจอ)
+Expected: **PASS ทั้ง 2 cases**
 
-- [ ] **Step 8: บอก ts-jest ว่าจะหา `@yokbaan/shared` ที่ไหน**
+> **แผนฉบับแรกเขียนไว้ผิด** — คาดว่าขั้นนี้จะ fail ด้วย `Cannot find module '@yokbaan/shared'`
+> แล้วต้องไปเพิ่ม `moduleNameMapper` ใน jest config เพื่อแก้ ความจริงคือ **ไม่ต้องแก้อะไรเลย**
+>
+> npm workspaces สร้าง symlink `node_modules/@yokbaan/shared → ../../packages/shared` ให้ตั้งแต่ตอน
+> `npm install` และ jest คลี่ symlink เป็น path จริงก่อนโหลดไฟล์ ทำให้ `packages/shared/src/index.ts`
+> ถูกมองว่าอยู่นอก `node_modules` จึงผ่าน ts-jest ตามปกติ การหยิบ `moduleNameMapper` มาใส่จะเป็น
+> **config ที่ไม่ได้ทำอะไร** และแย่กว่านั้นคือมันจะ hardcode path ทับการ resolve ของจริง — วันที่
+> `packages/shared/package.json` เปลี่ยน `main` ฝั่งเทสจะยังชี้ path เก่าอยู่ ขณะที่ฝั่งเว็บย้ายตาม
+> กลายเป็นความต่างระหว่างสองฝั่ง ซึ่งคือสิ่งที่ package นี้เกิดมาเพื่อป้องกันพอดี
 
-แก้ `apps/api/test/jest-e2e.json` เพิ่ม `moduleNameMapper`:
+- [ ] **Step 8: พิสูจน์ว่า schema กลาง "มีฟัน" จริง**
 
-```json
-{
-  "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": "..",
-  "testEnvironment": "node",
-  "testRegex": ".e2e-spec.ts$",
-  "transform": { "^.+\\.(t|j)s$": "ts-jest" },
-  "setupFiles": ["<rootDir>/test/setup-env.ts"],
-  "moduleNameMapper": {
-    "^@yokbaan/shared$": "<rootDir>/../../packages/shared/src/index.ts"
-  }
-}
-```
+นี่คือขั้นแดงตัวจริงของ task นี้ — เทสที่ผ่านเฉยๆ ยังไม่ได้พิสูจน์ว่า schema บังคับอะไร
 
-- [ ] **Step 9: รันเทสให้ผ่าน**
+แก้ `apps/api/src/health/health.controller.ts` ชั่วคราว ให้ `check()` คืนค่าคนละรูป เช่นเปลี่ยน
+ทั้ง return type และค่าที่คืนเป็น `{ status: 'fine' }` แล้วรัน:
 
 Run: `npm run api:test`
 
+Expected: case `GET /health matches the shared schema` **FAIL** ส่วน case `/health/db` ยังผ่าน
+
+> ถ้า TypeScript ปัดตกตั้งแต่ตอน compile ก็ถือว่าใช้ได้เหมือนกัน — บันทึก error นั้นไว้แทน
+> เพราะมันพิสูจน์ว่า type จาก schema กลางกำลังคุมฝั่ง API อยู่จริง
+
+- [ ] **Step 9: คืนค่าเดิมแล้วยืนยัน**
+
+```bash
+git checkout -- apps/api/src/health/health.controller.ts
+npm run api:test
+```
+
 Expected: PASS ทั้ง 2 cases
 
-> **ทำไม task นี้ถึงคุ้ม** — ตอนนี้ถ้าใครแก้ `HealthController` ให้ตอบ `{ status: 'fine' }` เทสจะ fail ทันที เพราะ schema กลางไม่ยอม นี่คือกลไกที่จะกันไม่ให้ api กับ web หลุดจากกันในเฟสหลังๆ
+> **ทำไม task นี้ถึงคุ้ม** — ตอนนี้ `healthResponseSchema` เป็นเจ้าของนิยามรูปร่างข้อมูลแต่เพียงผู้เดียว
+> ฝั่ง API ถูกเทสบังคับให้ตอบตามนั้น ฝั่งเว็บจะ import ตัวเดียวกันไปใช้ใน Task 1.6
+> ใครแก้ข้างเดียวเมื่อไหร่ อีกข้างพังทันทีตอน build หรือตอนเทส ไม่ใช่ตอนลูกค้าเปิดเว็บ
 
 - [ ] **Step 10: Commit**
 
@@ -1064,11 +1075,15 @@ git commit -m "feat(web): add react + vite + tailwind app wired to the api"
 
 ```bash
 cp .env.example .env
+ln -s ../../.env apps/api/.env   # Prisma CLI อ่าน .env จากโฟลเดอร์ workspace ของตัวเอง
 npm install
 npm run db:up      # เปิด PostgreSQL ใน Docker
 npm run api:dev    # http://localhost:3000
 npm run web:dev    # http://localhost:5173
 ```
+
+> บรรทัด `ln -s` จำเป็นเพราะ symlink ถูก git ignore (มันชี้ไป `.env` ที่ไม่เข้า git)
+> คนที่ clone repo ไปใหม่ต้องสร้างเอง มิฉะนั้น `prisma migrate` จะหา `DATABASE_URL` ไม่เจอ
 
 ## คำสั่งที่ใช้บ่อย
 
